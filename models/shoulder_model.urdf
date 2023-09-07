@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<!--
+  Gazebo ROS differential drive plugin 
+
+  Try sending commands:
+
+    ros2 topic pub /demo/cmd_vel geometry_msgs/Twist '{linear: {x: 0.05}}' -1
+
+    ros2 topic pub /demo/cmd_vel geometry_msgs/Twist '{angular: {z: 0.1}}' -1
+
+  Try listening to odometry:
+
+    ros2 topic echo /demo/odom
+
+  Try listening to TF:
+
+    ros2 run tf2_ros tf2_echo odom chassis
+
+    ros2 run tf2_ros tf2_echo chassis right_wheel
+
+    ros2 run tf2_ros tf2_echo chassis left_wheel
+-->
+
+<robot name="reachstacker">
+  <!-- dummy link to solve error "[kdl_parser]: The root link chassis has an inertia specified in the URDF, 
+  but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF" -->
+  <link name="base_link"/>
+
+  <!-- Controllable Axes -->
+  <link name="hubarm1">
+    <visual name="visual">
+      <origin xyz="0.0 +0.085375 +0.0745685" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.150 0.17075 0.149137"/>  
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="Achse3" type="revolute">
+    <origin xyz="0 0.0 0.0" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="hubarm1"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="0.0" upper="0.890" effort="1000.0" velocity="1000.0"/>
+  </joint>
+
+  <link name="hubarm2">
+    <visual name="visual">
+      <origin xyz="0.0 +0.303945 0.0" rpy="1.570 0.0 0.0"/>
+      <geometry>
+         <cylinder radius="0.050" length="0.60789"/> 
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="Achse4" type="prismatic">
+    <origin xyz="0 0.17075 0.149137" rpy="0 0 0"/>
+    <parent link="hubarm1"/>
+    <child link="hubarm2"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0" upper="0.5" effort="1000.0" velocity="1000.0"/>
+  </joint>
+
+  <link name="gripper1">
+    <visual name="visual">
+      <origin xyz="0.0 0.02 -0.039" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.05 0.04 0.078"/>  
+      </geometry>
+      <material name="purple">
+        <color rgba="1 0 1 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="Achse5" type="revolute">
+    <origin xyz="0.0 0.60789 0.0" rpy="0 0 0"/>
+    <parent link="hubarm2"/>
+    <child link="gripper1"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.87" upper="0.0" effort="1000.0" velocity="1000.0"/>
+  </joint>
+
+  <link name="gripper2">
+    <visual name="visual">
+      <origin xyz="0.0 0.0 -0.0375" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.10 0.06 0.075"/> 
+      </geometry>
+      <material name="yellow">
+        <color rgba="1 1 0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="Achse6" type="revolute">
+    <origin xyz="0 0.02 -0.078" rpy="0 0 0"/>
+    <parent link="gripper1"/>
+    <child link="gripper2"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.09" upper="2.09" effort="1000.0" velocity="1000.0"/>
+  </joint>
+
+  <link name="gripper3">
+    <visual name="visual">
+      <origin xyz="0.0 0.0 +0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.12 0.05 0.002"/> 
+      </geometry>
+      <material name="azure">
+        <color rgba="0 1 1 1" />
+      </material>
+    </visual>
+  </link>
+      
+  <joint name="Achse7" type="prismatic">
+    <origin xyz="0 0.0 -0.075" rpy="0 0 0"/>
+    <parent link="gripper2"/>
+    <child link="gripper3"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.005" upper="0.005" effort="1000.0" velocity="1000.0"/>
+  </joint>
+
+
+</robot>
