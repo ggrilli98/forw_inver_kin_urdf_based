@@ -29,7 +29,7 @@ class kinamtics_furnisher(Node):
 
         self.inverse_kin_join_values_publisher = self.create_publisher(
             Float32MultiArray,
-            'distance_container_from_the_O0',
+            'joint_values_geom',
             10
         )
 
@@ -37,9 +37,11 @@ class kinamtics_furnisher(Node):
 
 
     def furnisher_callback(self):
-        self.i = self.i + 1
+        # self.i = self.i + 1
+        # msg = Float32MultiArray()
+        # msg.data = [0.000, 0.8 , 0.5] #(in meters)
         msg = Float32MultiArray()
-        msg.data = [0.000, 0.8 , 0.5] #(in meters)
+        msg.data = [32.0, 242.0, -32.0, 0.0, 0.0]
         print(msg.data)
         self.inverse_kin_join_values_publisher.publish(msg)
 

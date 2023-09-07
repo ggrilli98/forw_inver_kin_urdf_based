@@ -22,7 +22,8 @@ setup(
         'console_scripts': [   [
                 'ee_inverse_calc = forw_inver_kin_urdf_based.ee_inv_kin_finder:main',
                 'distance_publisher = forw_inver_kin_urdf_based.distance_publisher:main',
-                'front_camera_forward = forw_inver_kin_urdf_based.front_camera_forw_finder:main'
+                'front_camera_forward = forw_inver_kin_urdf_based.front_camera_forw_kin_finder:main',
+                'top_camera_forward = forw_inver_kin_urdf_based.top_camera_forw_kin_finder:main'
         ],
 
         ],

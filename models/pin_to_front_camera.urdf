@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<!--
+  Gazebo ROS differential drive plugin 
+
+  Try sending commands:
+
+    ros2 topic pub /demo/cmd_vel geometry_msgs/Twist '{linear: {x: 0.05}}' -1
+
+    ros2 topic pub /demo/cmd_vel geometry_msgs/Twist '{angular: {z: 0.1}}' -1
+
+  Try listening to odometry:
+
+    ros2 topic echo /demo/odom
+
+  Try listening to TF:
+
+    ros2 run tf2_ros tf2_echo odom chassis
+
+    ros2 run tf2_ros tf2_echo chassis right_wheel
+
+    ros2 run tf2_ros tf2_echo chassis left_wheel
+-->
+
+<robot name="reachstacker">
+  <!-- dummy link to solve error "[kdl_parser]: The root link chassis has an inertia specified in the URDF, 
+  but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF" -->
+  <link name="base_link"/>
+  <joint name="base_link_to_chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- All links are connected to the chassis -->
+  <link name="chassis">
+    <visual name="visual">
+      <origin xyz="0.0 0.355 0.2375" rpy="0 0 0"/>
+      <geometry>
+ 		<box size="0.44 0.710 0.350"/>
+      </geometry>
+            <material name="cyan">
+        <color rgba="0.0 0 1 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="camera_front_joint" type="fixed">
+    <origin xyz="0 0.65309 0.2075" rpy="0 0 0"/>
+    <parent link="chassis"/>
+    <child link="camera_front_link"/>
+  </joint>
+
+<link name="camera_front_link">
+    <visual name="visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.10 0.047 0.047"/> 
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1" />
+      </material>
+    </visual>
+  </link>
+
+
+
+
+</robot>
