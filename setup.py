@@ -20,9 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [   [
-                'inverse_calc = forw_inver_kin_urdf_based.inv_kin_finder:main',
-                'distance_publisher = forw_inver_kin_urdf_based.distance_publisher:main'
-                 
+                'ee_inverse_calc = forw_inver_kin_urdf_based.ee_inv_kin_finder:main',
+                'distance_publisher = forw_inver_kin_urdf_based.distance_publisher:main',
+                'front_camera_forward = forw_inver_kin_urdf_based.front_camera_forw_finder:main'
         ],
 
         ],

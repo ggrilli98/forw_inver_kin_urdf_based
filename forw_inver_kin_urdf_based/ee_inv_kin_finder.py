@@ -39,7 +39,7 @@ class kinematics_processer(Node):
         )
 
         #Definiton of the robot arm links, joint and structure
-        self.my_chain = ikpy.chain.Chain.from_urdf_file("/home/gregorio/ros2_ws/src/forw_inver_kin_urdf_based/models/shoulder_model.urdf")
+        self.my_chain = ikpy.chain.Chain.from_urdf_file("/home/gregorio/ros2_ws/src/forw_inver_kin_urdf_based/models/pin_to_ee_model.urdf")
         print(self.my_chain.links)
         print(self.my_chain.name)
         print(self.my_chain.active_links_mask)
