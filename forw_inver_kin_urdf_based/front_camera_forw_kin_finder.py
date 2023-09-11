@@ -30,7 +30,7 @@ class kinematics_processer(Node):
         self.front_camera_position_sender_timer = self.create_timer(0.5, self.forward_xyz_sender_timer_callback)
 
         #Definiton of the links, joint and structure
-        self.pin_to_front_camera_chain = ikpy.chain.Chain.from_urdf_file("/home/gregorio/ros2_ws/src/forw_inver_kin_urdf_based/models/pin_to_front_camera.urdf")
+        self.pin_to_front_camera_chain = ikpy.chain.Chain.from_urdf_file("/home/hafola/ros2_ws/src/forw_inver_kin_urdf_based/models/pin_to_front_camera.urdf")
         print(self.pin_to_front_camera_chain.links)
         print(self.pin_to_front_camera_chain.name)
         print(self.pin_to_front_camera_chain.active_links_mask)

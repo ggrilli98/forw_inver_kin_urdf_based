@@ -13,7 +13,7 @@ import numpy as np
 import ikpy.utils.plot as plot_utils
 import matplotlib.pyplot
 from mpl_toolkits.mplot3d import Axes3D
-
+from apriltag_hafola.apriltag_msgs.msg import AprilTagDetectionArray #to check why not working, it should
 
 class kinematics_processer(Node):
     def __init__(self):
@@ -42,13 +42,14 @@ class kinematics_processer(Node):
         )
 
         # subscribers for the top high camera
-        self.front_camera_apriltag_distance_xyz_sub  = self.create_subscription(
-            Float32MultiArray,
-            'top_camera_apriltag_xyz',
-            self.top_camera_apriltag_xyz_callback,
+        self.fake_front_camera_apriltag_distance_xyz_sub  = self.create_subscription(
+            AprilTagDetectionArray,
+            '/apriltag_detections',
+            self.fake_front_camera_apriltag_xyz_callback,
             10
         )
-        self.front_camera_xyz_sub = self.create_subscription(
+
+        self.top_camera_xyz_sub = self.create_subscription(
             Float32MultiArray,
             'top_camera_xyz',
             self.top_camera_xyz_callback,
@@ -58,7 +59,7 @@ class kinematics_processer(Node):
         
 
         #Definiton of the robot arm links, joint and structure
-        self.my_chain = ikpy.chain.Chain.from_urdf_file("/home/gregorio/ros2_ws/src/forw_inver_kin_urdf_based/models/pin_to_ee_model.urdf")
+        self.my_chain = ikpy.chain.Chain.from_urdf_file("/home/hafola/ros2_ws/src/forw_inver_kin_urdf_based/models/pin_to_ee_model.urdf")
         print(self.my_chain.links)
         print(self.my_chain.name)
         print(self.my_chain.active_links_mask)
@@ -66,7 +67,7 @@ class kinematics_processer(Node):
         self.desired_position_xyz = [0.0]*3
         self.desired_orientation = [0.0, 0.0, 1.0]
 
-        self.vector_front_camera_to_apriltag = [0.0, 0.120, 0.320]
+        self.vector_front_camera_to_apriltag = [-0.035, 0.520, 0.420]
         self.vector_top_camera_to_apriltag = [0.0]
         self.vector_pin_to_front_camera_xyz = [0.0]*3
         self.vector_pin_to_top_camera_xyz = [0.0]*3
@@ -100,7 +101,9 @@ class kinematics_processer(Node):
         print('detected apriltag distance', self.vector_top_camera_to_apriltag, 'from front camera')
     #------------------------------------------------------------------
 
-    # TOP CAMERA ------------------------------------------------------
+
+
+    # TOP CAMERA NOT IMPLEMENTED------------------------------------------------------
         #finds the xyz position of the front camera in the pin frame coordinate frame
     def top_camera_xyz_callback(self, msg):
         
@@ -112,11 +115,16 @@ class kinematics_processer(Node):
         self.vector_pin_to_top_camera_apriltag_xyz = np.array(self.vector_pin_to_top_camera_xyz) + np.array(self.vector_top_camera_to_apriltag)
 
         #storing the distance between the camera and the identified apriltag
-    def top_camera_apriltag_xyz_callback(self, msg):
+    def fake_front_camera_apriltag_xyz_callback(self, msg):
 
-        self.vector_top_camera_to_apriltag[0] = msg.data[0]/1000 #message in is mm, we want meter for the inverse calculations
-        self.vector_top_camera_to_apriltag[1] = msg.data[1]/1000
-        self.vector_top_camera_to_apriltag[2] = msg.data[2]/1000
+        print(msg)
+        print(msg.pose)
+        print(msg.pose.position)
+        print(msg.pose.orientation)
+
+        # self.vector_top_camera_to_apriltag[0] = msg.data[0]/1000 #message in is mm, we want meter for the inverse calculations
+        # self.vector_top_camera_to_apriltag[1] = msg.data[1]/1000
+        # self.vector_top_camera_to_apriltag[2] = msg.data[2]/1000
     #------------------------------------------------------------------
 
 
@@ -128,8 +136,8 @@ class kinematics_processer(Node):
             self.desired_position_xyz[i] = distance_to_pin_xyz[i]
         print(self.desired_position_xyz)
 
-        # self.inverse_kin_joint_values = self.my_chain.inverse_kinematics(self.desired_position_xyz, self.desired_orientation, "Z")
-        self.inverse_kin_joint_values = self.my_chain.inverse_kinematics(self.desired_position_xyz)
+        self.inverse_kin_joint_values = self.my_chain.inverse_kinematics(self.desired_position_xyz, self.desired_orientation, "Z")
+        # self.inverse_kin_joint_values = self.my_chain.inverse_kinematics(self.desired_position_xyz)
         print('inverse kin joint values calculated')
         print(self.inverse_kin_joint_values)
 
