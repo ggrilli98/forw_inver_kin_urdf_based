@@ -8,6 +8,8 @@ ROS 2 Package for controlling the 7 Axis Robotic arm for the Hafola prototype, w
     source /opt/ros/foxy/setup.bash
     cd ~/ros2_ws
     source install/setup.bash
-    ros2 run  
+
+### 2. main Def
+    inverse_kin_pin_to_ee_finder
     
 
